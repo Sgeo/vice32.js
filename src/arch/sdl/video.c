@@ -790,7 +790,7 @@ static video_canvas_t *sdl_canvas_create(video_canvas_t *canvas, unsigned int *w
 
     if (canvas == sdl_active_canvas) {
 #ifndef ANDROID_COMPILE
-        SDL_EventState(SDL_VIDEORESIZE, SDL_IGNORE);
+//        SDL_EventState(SDL_VIDEORESIZE, SDL_IGNORE);
 #endif
 #ifndef HAVE_HWSCALE
         new_screen = SDL_SetVideoMode(actual_width, actual_height, sdl_bitdepth, flags);
@@ -836,9 +836,7 @@ static video_canvas_t *sdl_canvas_create(video_canvas_t *canvas, unsigned int *w
             }
         }
 #endif
-#ifndef ANDROID_COMPILE
-        SDL_EventState(SDL_VIDEORESIZE, SDL_ENABLE);
-#endif
+//        SDL_EventState(SDL_VIDEORESIZE, SDL_ENABLE);
     } else {
 #ifdef HAVE_HWSCALE
         /* free the old hwscale screen when hwscaled screen is switched away */
@@ -1421,11 +1419,11 @@ static void sdl_video_resize(unsigned int w, unsigned int h)
         }
 
 #ifndef ANDROID_COMPILE
-        SDL_EventState(SDL_VIDEORESIZE, SDL_IGNORE);
+//        SDL_EventState(SDL_VIDEORESIZE, SDL_IGNORE);
 #endif
         sdl_active_canvas->hwscale_screen = SDL_SetVideoMode((int)w, (int)h, sdl_bitdepth, flags);
 #ifndef ANDROID_COMPILE
-        SDL_EventState(SDL_VIDEORESIZE, SDL_ENABLE);
+//        SDL_EventState(SDL_VIDEORESIZE, SDL_ENABLE);
 #endif
 
 #ifdef SDL_DEBUG
