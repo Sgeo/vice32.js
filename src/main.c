@@ -75,6 +75,10 @@
 #include "svnversion.h"
 #endif
 
+#ifdef EMSCRIPTEN
+    #include <emscripten.h>
+#endif
+
 #ifdef DEBUG_MAIN
 #define DBG(x)  printf x
 #else
@@ -286,7 +290,11 @@ int main_program(int argc, char **argv)
 
     /* Let's go...  */
     log_message(LOG_DEFAULT, "Main CPU: starting at ($FFFC).");
+#ifdef EMSCRIPTEN
+    emscripten_set_main_loop(maincpu_mainloop, 0, 0);
+#else
     maincpu_mainloop();
+#endif   
 
     log_error(LOG_DEFAULT, "perkele!");
 
