@@ -1,0 +1,83 @@
+Trying to compile VICE for Ubuntu 18.04 LTS based on https://pigeon.neocities.org/vice.html
+
+Current commands:
+
+export ar_check=no
+./configure --enable-sdlui --with-sdlsound --without-png --without-uithreads --without-resid
+make
+emconfigure ./configure --enable-sdlui --with-sdlsound --without-png --without-uithreads --without-resid
+emmake make
+emmake make clean
+emmake make x64
+cd ..
+./build-x64
+
+
+Using ./configure line from https://github.com/rjanicek/vice.js/blob/9b3e5f21489f96967d649790d3c915ac3127c6ec/build#L16, without the --without-residfp flag
+
+Needed sudo apt-get install libsdl2-2.0 libsdl2-dev for the configuration to succeed. Possibly sdl1 files, those were installed too, but probably not.
+
+
+On run, stating stuff about HardSID. Going to try removing --without-resid:
+
+./configure --enable-sdlui --with-sdlsound
+
+That compiles and tries to run but segfaults. Trying tag v3.2
+
+Trying to just run that configure with emscripten. Commenting out an ar truncating check with "export ar_check=no", that works.
+
+Adding --without-png to config
+
+
+Complains about SDL_keysym.h. Trying --enable-sdlui2 instead of --enable-sdlui. Might break modifier keys.
+
+Using build-x64 build script (not the top of the file). Removing a line about vice/src/platform. Complaints about forced memory
+
+Removing forced memory parameter. Complaints about duplicate console_close. Trying removing references to console.c and console from Makefiles in vice/src/arch/sdl
+
+Seems to work, now getting error: IOError: [Errno 2] No such file or directory: '../js/x64.js.mem'
+Trying making a js directory first. That works.
+
+Trying to load the HTML file: LinkError: import object field '__mouse_enabled' is not a Number
+Trying adding  ../vice/src/joyport/*.o \ to build-x64.sh... worked for that error
+TTrying adding ../vice/src/samplerdrv/*.o \ ... That worked, onto the next one?
+../vice/src/tapeport/*.o \
+../vice/src/mididrv/*.o \
+
+Adding -s USE_SDL=2 to build-x64
+
+Works, but then a function was still not visible, possibly browser cache problems
+
+Unable to load kernal ROM, adding -s EMTERPRETIFY=1 -s EMTERPRETIFY_ASYNC=1
+
+Didn't help
+
+Trying changing --embed-file to ../vice/data
+
+Changing it to "bin@/" works. Considering changing it to use the data files from the original source.
+
+Now complaining about main loop. Making change to main.c. Not bothering with compiler directives at this point.
+
+Complaints about emscripten_set_main_loop_timing resolved with a dummy_main_loop, a call to emscripten_set_main_loop(dummy_main_loop, 0, 0) at the beginning, and a call to emscripten_cancel_main_loop() before setting main loop.
+
+No errors, but blank screen. Adding back async settings.
+
+No change, tried removing emscripten_set_main_loop(maincpu_mainloop). No change
+
+Going to try removing sound... no effect(?!)
+
+Repointing embed-files to "../vice/data@/". No negative effect
+
+Trying adding an emscripten_cancel_main_loop() before starting the Emterpretified main loop.... Did not help
+
+Reviewing effort involved in making VICE main loop safe...added static to some variables, added a check to only reset machine once, removed loop, added the mainloop as an emscripten main loop... result, still same issues.
+
+Trying --without-uithreads in ./configure
+
+Trying export CFLAGS=-s EMTERPRETIFY=1 EMTERPRETIFY_ASYNC=1 before emconfigure
+
+No result, trying manual change in post-configure Makefile.... No change
+
+Trying from scratch: A ./configure and make beforehand, before Emscripten, is critical to build a native executable called "gentranslate". And "make" without x64 is needed at some point to build dynamically generated .h files.
+
+Trying SDL1... for some reason, wants #include <string.h> in vice.h. Resid functions failing, trying --without-resid
