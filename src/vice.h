@@ -30,6 +30,7 @@
 
 #ifndef VICE_VICE_H
 #define VICE_VICE_H
+#include <string.h>
 
 /* We use <config.h> instead of "config.h" so that a compilation using
    -I. -I$srcdir will use ./config.h rather than $srcdir/config.h
