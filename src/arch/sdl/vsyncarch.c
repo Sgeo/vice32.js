@@ -44,6 +44,10 @@
 
 #include "vice_sdl.h"
 
+#ifdef EMSCRIPTEN
+    #include <emscripten.h>
+#endif
+
 /* ------------------------------------------------------------------------- */
 
 /* SDL_Delay & GetTicks have 1ms resolution, while VICE needs 1us */
@@ -77,10 +81,24 @@ void vsyncarch_display_speed(double speed, double frame_rate, int warp_enabled)
     ui_display_speed((float)speed, (float)frame_rate, warp_enabled);
 }
 
+#ifdef EMSCRIPTEN
+/* Wrap the resume main loop function to prevent a pointer cast making it safe for asm.js */
+void emscripten_resume_main_loop_wrapper(void *arg) 
+{
+    emscripten_resume_main_loop();
+}
+#endif
+
+
 /* Sleep a number of timer units. */
 void vsyncarch_sleep(unsigned long delay)
 {
-    SDL_Delay(delay / VICE_SDL_TICKS_SCALE);
+#ifdef EMSCRIPTEN
+    emscripten_pause_main_loop();
+    emscripten_async_call(emscripten_resume_main_loop_wrapper, NULL, delay/VICE_SDL_TICKS_SCALE);
+#else    
+    SDL_Delay(delay/VICE_SDL_TICKS_SCALE);
+#endif
 }
 
 void vsyncarch_presync(void)
