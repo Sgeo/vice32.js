@@ -38,18 +38,27 @@
 #include "uimenu.h"
 #include "vsync.h"
 
+#include <emscripten.h>
+
 /* ----------------------------------------------------------------- */
 /* ui.h */
 
 static int is_paused = 0;
 
-static void pause_trap(uint16_t addr, void *data)
+
+
+static void pause_trap_top(void *data)
 {
     vsync_suspend_speed_eval();
     while (is_paused) {
         ui_dispatch_events();
         SDL_Delay(10);
     }
+}
+
+static void pause_trap(uint16_t addr, void *data)
+{
+    emscripten_push_main_loop_blocker(pause_trap_top, data);
 }
 
 void ui_pause_emulation(int flag)
