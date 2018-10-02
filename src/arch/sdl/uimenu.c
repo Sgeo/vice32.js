@@ -62,6 +62,16 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <emscripten.h>
+
+int SDL_WaitEvent(SDL_Event *event)
+{
+    while(!SDL_PollEvent(event)) {
+        emscripten_sleep(0);
+    }
+    return 1;
+}
+
 int sdl_menu_state = 0;
 
 void (*sdl_ui_set_menu_params)(int index, menu_draw_t *menu_draw);
@@ -548,7 +558,14 @@ static ui_menu_retval_t sdl_ui_menu_item_activate(ui_menu_entry_t *item)
     return MENU_RETVAL_DEFAULT;
 }
 
+static void sdl_ui_trap_top(void *data);
+
 static void sdl_ui_trap(uint16_t addr, void *data)
+{
+    emscripten_push_main_loop_blocker(sdl_ui_trap_top, data);
+}
+
+static void sdl_ui_trap_top(void *data)
 {
     unsigned int width;
     unsigned int height;
