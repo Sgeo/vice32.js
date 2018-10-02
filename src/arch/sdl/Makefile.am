@@ -46,7 +46,6 @@ libarch_a_SOURCES = \
 	archdep.c \
 	archdep.h \
 	blockdev.c \
-	console.c \
 	console_unix.c \
 	coproc.c \
 	coproc.h \
