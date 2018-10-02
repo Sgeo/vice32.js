@@ -56,7 +56,7 @@
 #else
 #  ifdef USE_SDL_PREFIX
 #    include <SDL/SDL.h>
-#    include <SDL/SDL_keysym.h>
+#    include <SDL/SDL_keycode.h>
 #    ifdef INCLUDE_SDL_SYSWM_H
 #      include <SDL/SDL_syswm.h>
 #    endif
@@ -68,7 +68,7 @@
 #    endif
 #  else
 #    include <SDL.h>
-#    include <SDL_keysym.h>
+#    include <SDL_keycode.h>
 #    ifdef INCLUDE_SDL_SYSWM_H
 #      include <SDL_syswm.h>
 #    endif
