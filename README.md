@@ -3,6 +3,7 @@ Emscripten port of the Commodore 64 emulator VICE, version 3.2.
 
 ## Improvements over vice.js 2.4
 * Partially working menus (more improvements to come)
+* ReSID support
 * Built-in keymaps, identical cross-browser
 * * VICE.js 2.4 used a custom keymap to compensate for Emscripten SDL1's brokenness.
 * * Defaults to symbolic, can be set to positional in the menu
