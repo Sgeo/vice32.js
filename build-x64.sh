@@ -26,7 +26,7 @@ emcc -O2 -o ../js/x64.js -s DOUBLE_MODE=0 -s EMTERPRETIFY=1 -s EMTERPRETIFY_ASYN
         '_custom_keyset_callback', \
         '_sdl_ui_poll_event', \
         '_dummy_entry_must_be_last' \
-    ]" -s PRECISE_I64_MATH=0 -s WARN_ON_UNDEFINED_SYMBOLS=1 -s TOTAL_MEMORY=33554432 -s ALLOW_MEMORY_GROWTH=1 -s USE_SDL=1 -s WASM=1 -s SINGLE_FILE=1 --js-library ../library-vice.js \
+    ]" -s PRECISE_I64_MATH=0 -s WARN_ON_UNDEFINED_SYMBOLS=1 -s TOTAL_MEMORY=33554432 -s ALLOW_MEMORY_GROWTH=1 -s USE_SDL=1 -s WASM=1 -s SINGLE_FILE=1 \
     -s EXPORTED_FUNCTIONS="[ \
         '_autostart_autodetect', \
         '_cmdline_options_string', \
