@@ -73,6 +73,8 @@ int vsync_frame_counter;
 #include "vsync.h"
 #include "vsyncapi.h"
 
+#include <emscripten.h>
+
 /* ------------------------------------------------------------------------- */
 
 static int set_timer_speed(int speed);
@@ -247,6 +249,12 @@ static int set_timer_speed(int speed)
     } else {
         timer_speed = 0;
         frame_ticks = 0;
+    }
+
+    if(warp_mode_enabled || speed >= 115) {
+        emscripten_set_main_loop_timing(EM_TIMING_SETIMMEDIATE, 0);
+    } else {
+        emscripten_set_main_loop_timing(EM_TIMING_RAF, 1);
     }
 
     return 0;
