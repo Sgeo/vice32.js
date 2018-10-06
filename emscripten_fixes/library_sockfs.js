@@ -479,7 +479,6 @@ mergeInto(LibraryManager.library, {
         sock.daddr = peer.addr;
         sock.dport = peer.port;
 
-        // always "fail" in non-blocking mode
         // VICE doesn't understand EINPROGRESS. Ignore it.
         //throw new FS.ErrnoError(ERRNO_CODES.EINPROGRESS);
         return 0;
