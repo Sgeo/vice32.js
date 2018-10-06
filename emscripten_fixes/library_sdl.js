@@ -3678,7 +3678,9 @@ var LibrarySDL = {
 
   // Misc
 
-  SDL_InitSubSystem: function(flags) { return 0 },
+  SDL_InitSubSystem: function(flags) { 
+      SDL.initFlags |= flags;
+  },
 
   SDL_RWFromConstMem__proxy: 'sync',
   SDL_RWFromConstMem__sig: 'iii',
