@@ -480,7 +480,9 @@ mergeInto(LibraryManager.library, {
         sock.dport = peer.port;
 
         // always "fail" in non-blocking mode
-        throw new FS.ErrnoError(ERRNO_CODES.EINPROGRESS);
+        // VICE doesn't understand EINPROGRESS. Ignore it.
+        //throw new FS.ErrnoError(ERRNO_CODES.EINPROGRESS);
+        return 0;
       },
       listen: function(sock, backlog) {
         if (!ENVIRONMENT_IS_NODE) {
