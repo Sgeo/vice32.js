@@ -292,6 +292,7 @@ int main_program(int argc, char **argv)
     log_message(LOG_DEFAULT, "Main CPU: starting at ($FFFC).");
 #ifdef EMSCRIPTEN
     emscripten_set_main_loop(maincpu_mainloop, 0, 0);
+    emscripten_set_main_loop_timing(EM_TIMING_SETIMMEDIATE, 0);
 #else
     maincpu_mainloop();
 #endif   

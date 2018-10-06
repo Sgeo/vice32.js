@@ -243,8 +243,10 @@ static CLOCK speed_eval_prev_clk;
 static void reset_loop_timing(void)
 {
     if(warp_mode_enabled || blurred || timer_speed >= 115) {
+        log_message(LOG_DEFAULT, "Changing main loop timing to setImmediate");
         emscripten_set_main_loop_timing(EM_TIMING_SETIMMEDIATE, 0);
     } else {
+        log_message(LOG_DEFAULT, "Changing main loop timing to requestAnimationFrame");
         emscripten_set_main_loop_timing(EM_TIMING_RAF, 1);
     }
 }
@@ -331,8 +333,10 @@ void vsync_init(void (*hook)(void))
     vsyncarch_freq = vsyncarch_frequency();  /* number of units per second */
     /* log_message(LOG_DEFAULT, "VSYNC Init freq: %u", (unsigned int)vsyncarch_freq); */
 
-    emscripten_set_blur_callback(NULL, NULL, EM_FALSE, blurfocus_callback);
-    emscripten_set_focus_callback(NULL, NULL, EM_FALSE, blurfocus_callback);
+    emscripten_set_blur_callback("#window", NULL, EM_FALSE, blurfocus_callback);
+    emscripten_set_focus_callback("#window", NULL, EM_FALSE, blurfocus_callback);
+
+    reset_loop_timing();
 
     
 }
