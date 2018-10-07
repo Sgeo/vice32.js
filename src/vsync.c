@@ -333,8 +333,8 @@ void vsync_init(void (*hook)(void))
     vsyncarch_freq = vsyncarch_frequency();  /* number of units per second */
     /* log_message(LOG_DEFAULT, "VSYNC Init freq: %u", (unsigned int)vsyncarch_freq); */
 
-    emscripten_set_blur_callback("#window", NULL, EM_FALSE, blurfocus_callback);
-    emscripten_set_focus_callback("#window", NULL, EM_FALSE, blurfocus_callback);
+    //emscripten_set_blur_callback("#window", NULL, EM_FALSE, blurfocus_callback);
+    //emscripten_set_focus_callback("#window", NULL, EM_FALSE, blurfocus_callback);
 
     reset_loop_timing();
 
