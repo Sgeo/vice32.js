@@ -778,7 +778,8 @@ if __name__ == '__main__':
 
   if len(WHITELIST):
     # we are using a whitelist: fill the blacklist with everything not whitelisted
-    BLACKLIST = set([func for func in asm.funcs if func not in WHITELIST])
+    WHITELIST_REGEX = [re.compile(x[1:-1]) for x in WHITELIST if x.startswith("/") and x.endswith("/")]  
+    BLACKLIST = set([func for func in asm.funcs if func not in WHITELIST and not any(regex.search(func) for regex in WHITELIST_REGEX)])
 
   # decide which functions will be emterpreted, and find which are externally reachable (from outside other emterpreted code; those will need trampolines)
 

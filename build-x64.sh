@@ -25,6 +25,11 @@ emcc -O2 -o ../js/x64.js -s DOUBLE_MODE=0 -s EMTERPRETIFY=1 -s EMTERPRETIFY_ASYN
         '_custom_ui_keyset_callback', \
         '_custom_keyset_callback', \
         '_sdl_ui_poll_event', \
+        '_handle_message_box', \
+        '_message_box', \
+        '_ui_message', \
+        '_show_text', \
+        '/.*_callback/',
         '_dummy_entry_must_be_last' \
     ]" -s PRECISE_I64_MATH=0 -s WARN_ON_UNDEFINED_SYMBOLS=1 -s TOTAL_MEMORY=33554432 -s ALLOW_MEMORY_GROWTH=1 -s USE_SDL=1 -s WASM=1 -s SINGLE_FILE=1 \
     -s EXPORTED_FUNCTIONS="[ \
@@ -72,6 +77,7 @@ emcc -O2 -o ../js/x64.js -s DOUBLE_MODE=0 -s EMTERPRETIFY=1 -s EMTERPRETIFY_ASYN
         src/rs232drv/*.o \
         src/rtc/*.o \
         src/samplerdrv/*.o \
+        src/socketdrv/*.o \
         src/serial/*.o \
         src/sid/*.o \
         src/sounddrv/*.o \
