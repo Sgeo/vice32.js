@@ -89,8 +89,6 @@ static int refresh_rate;
 /* "Warp mode".  If nonzero, attempt to run as fast as possible. */
 static int warp_mode_enabled;
 
-/* "Blurred". Indicates whether we lost focus and therefore need to be in setImmediate mode */
-static int blurred = 0;
 
 
 static int set_relative_speed(int val, void *param)
@@ -240,14 +238,14 @@ static int speed_eval_suspended = 1;
 static int sync_reset = 1;
 static CLOCK speed_eval_prev_clk;
 
-static void reset_loop_timing(void)
+void vsync_reset_loop_timing(void)
 {
-    if(warp_mode_enabled || blurred || timer_speed >= 115) {
-        log_message(LOG_DEFAULT, "Changing main loop timing to setImmediate");
+    if(warp_mode_enabled || timer_speed >= 115) {
+        log_message(LOG_DEFAULT, "Changing main loop timing to EM_TIMING_SETIMMEDIATE");
         emscripten_set_main_loop_timing(EM_TIMING_SETIMMEDIATE, 0);
     } else {
-        log_message(LOG_DEFAULT, "Changing main loop timing to requestAnimationFrame");
-        emscripten_set_main_loop_timing(EM_TIMING_RAF, 1);
+        log_message(LOG_DEFAULT, "Changing main loop timing to EM_TIMING_SETTIMEOUT");
+        emscripten_set_main_loop_timing(EM_TIMING_SETTIMEOUT, 0);
     }
 }
 
@@ -265,7 +263,7 @@ static int set_timer_speed(int speed)
         timer_speed = 0;
         frame_ticks = 0;
     }
-    reset_loop_timing();
+    vsync_reset_loop_timing();
 
     return 0;
 }
@@ -315,12 +313,6 @@ double vsync_get_refresh_frequency(void)
     return refresh_frequency;
 }
 
-static EM_BOOL blurfocus_callback(int event_type, const EmscriptenFocusEvent *event, void *userData)
-{
-    blurred = event_type == EMSCRIPTEN_EVENT_BLUR;
-    reset_loop_timing();
-    return EM_FALSE;
-}
 
 void vsync_init(void (*hook)(void))
 {
@@ -332,11 +324,6 @@ void vsync_init(void (*hook)(void))
 
     vsyncarch_freq = vsyncarch_frequency();  /* number of units per second */
     /* log_message(LOG_DEFAULT, "VSYNC Init freq: %u", (unsigned int)vsyncarch_freq); */
-
-    //emscripten_set_blur_callback("#window", NULL, EM_FALSE, blurfocus_callback);
-    //emscripten_set_focus_callback("#window", NULL, EM_FALSE, blurfocus_callback);
-
-    reset_loop_timing();
 
     
 }

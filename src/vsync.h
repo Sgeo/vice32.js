@@ -46,5 +46,7 @@ extern void vsync_set_machine_parameter(double refresh_rate, long cycles);
 extern double vsync_get_refresh_frequency(void);
 extern int vsync_do_vsync(struct video_canvas_s *c, int been_skipped);
 extern int vsync_disable_timer(void);
+extern void vsync_reset_loop_timing(void);
+
 
 #endif

@@ -70,6 +70,7 @@
 #include "uiapi.h"
 #include "version.h"
 #include "video.h"
+#include "vsync.h"
 
 #ifdef USE_SVN_REVISION
 #include "svnversion.h"
@@ -292,7 +293,7 @@ int main_program(int argc, char **argv)
     log_message(LOG_DEFAULT, "Main CPU: starting at ($FFFC).");
 #ifdef EMSCRIPTEN
     emscripten_set_main_loop(maincpu_mainloop, 0, 0);
-    emscripten_set_main_loop_timing(EM_TIMING_SETIMMEDIATE, 0);
+    vsync_reset_loop_timing();
 #else
     maincpu_mainloop();
 #endif   
