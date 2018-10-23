@@ -1,5 +1,6 @@
 echo compiling js...
-emcc -O2 -o ../js/x64.js -s DOUBLE_MODE=0 -s EMTERPRETIFY=1 -s EMTERPRETIFY_ASYNC=1 -s EMTERPRETIFY_WHITELIST="[ \
+cp src/x64 src/x64.o
+emcc src/x64.o  -O2 -o ../js/x64.js -s DOUBLE_MODE=0 -s EMTERPRETIFY=1 -s EMTERPRETIFY_ASYNC=1 -s EMTERPRETIFY_WHITELIST="[ \
         '_sdl_ui_trap_top', \
         '_sdl_ui_menu_display', \
         '_attach_disk_callback', \
@@ -46,44 +47,4 @@ emcc -O2 -o ../js/x64.js -s DOUBLE_MODE=0 -s EMTERPRETIFY=1 -s EMTERPRETIFY_ASYN
         '_main', \
         '_set_playback_enabled' \
     ]" \
-    --embed-file "data/C64@/C64" --embed-file "data/DRIVES@/DRIVES" --embed-file "data/fonts@/fonts" \
-        src/*.o \
-        src/arch/sdl/*.o \
-        src/c64/*.o \
-        src/c64/cart/*.o \
-        src/core/*.o \
-        src/diskimage/*.o \
-        src/drive/*.o \
-        src/drive/iec/*.o \
-        src/drive/iec/c64exp/*.o \
-        src/drive/iec/plus4exp/*.o \
-        src/drive/iec128dcr/*.o \
-        src/drive/iecieee/*.o \
-        src/drive/ieee/*.o \
-        src/drive/tcbm/*.o \
-        src/fileio/*.o \
-        src/fsdevice/*.o \
-        src/gfxoutputdrv/*.o \
-        src/iecbus/*.o \
-        src/imagecontents/*.o \
-        src/joyport/*.o \
-        src/lib/p64/*.o \
-        src/mididrv/*.o \
-        src/monitor/*.o \
-        src/parallel/*.o \
-        src/printerdrv/*.o \
-        src/raster/*.o \
-        src/resid/*.o \
-        src/rs232drv/*.o \
-        src/rtc/*.o \
-        src/samplerdrv/*.o \
-        src/socketdrv/*.o \
-        src/serial/*.o \
-        src/sid/*.o \
-        src/sounddrv/*.o \
-        src/tape/*.o \
-        src/tapeport/*.o \
-        src/userport/*.o \
-        src/vdrive/*.o \
-        src/vicii/*.o \
-        src/video/*.o
+    --embed-file "data/C64@/C64" --embed-file "data/DRIVES@/DRIVES" --embed-file "data/fonts@/fonts"

@@ -3,5 +3,3 @@ export ar_check=no
 make
 emconfigure ./configure --enable-sdlui --with-sdlsound --without-png --without-uithreads
 emmake make
-emmake make clean
-emmake make x64
