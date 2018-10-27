@@ -45,6 +45,7 @@
 
 #include <stdlib.h> /* abs */
 #include <string.h> /* memset */
+#include <emscripten/html5.h>
 #include "vice.h"
 
 #include "alarm.h"
@@ -1070,6 +1071,18 @@ int mouse_cmdline_options_init(void)
     return mousedrv_cmdline_options_init();
 }
 
+static EM_BOOL em_click_callback(int eventType, const EmscriptenMouseEvent *e, void *userData)
+{
+    emscripten_request_pointerlock("#canvas", 0);
+    return 0;
+}
+
+static EM_BOOL em_pointerlockchange_callback(int eventType, const EmscriptenPointerlockChangeEvent *pointerlockChangeEvent, void *userData)
+{
+    resources_set_int("Mouse", pointerlockChangeEvent->isActive);
+    return 0;
+}
+
 void mouse_init(void)
 {
     emu_units_per_os_units = (float)(machine_get_cycles_per_second() / vsyncarch_frequency());
@@ -1084,6 +1097,9 @@ void mouse_init(void)
     neos_prev = 0xff;
     mousedrv_init();
     clk_guard_add_callback(maincpu_clk_guard, clk_overflow_callback, NULL);
+    
+    emscripten_set_click_callback("#canvas", NULL, 0, em_click_callback);
+    emscripten_set_pointerlockchange_callback(NULL, NULL, 0, em_pointerlockchange_callback);
 }
 
 void mouse_shutdown(void)
